@@ -1,42 +1,51 @@
 'use client';
 
-import { useRef, useState, useEffect, type RefObject } from 'react';
-import { useFormStatus } from 'react-dom';
-import { Textarea } from './ui/textarea';
+import { useRef, useState, useEffect, type FormEvent } from 'react';
 import { Button } from './ui/button';
-import { Sparkles, Camera, Upload } from 'lucide-react';
-import { Logo } from './icons';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent } from './ui/card';
+import { Paperclip, Send, Camera } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Textarea } from './ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Alert, AlertTitle, AlertDescription } from './ui/alert';
 
 export function IngredientForm({
   formAction,
-  formRef,
+  isPending,
 }: {
   formAction: (payload: FormData) => void;
-  formRef: RefObject<HTMLFormElement>;
+  isPending: boolean;
 }) {
-  const { pending } = useFormStatus();
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  const [text, setText] = useState('');
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
-  const [isCapturing, setIsCapturing] = useState(false);
+  
   const { toast } = useToast();
-  const [capturedImageFile, setCapturedImageFile] = useState<File | null>(null);
 
   useEffect(() => {
-    if (isCapturing) {
+    if (!isPending) {
+      formRef.current?.reset();
+      setText('');
+      setImageFile(null);
+      setImagePreview(null);
+    }
+  }, [isPending]);
+
+  useEffect(() => {
+    if (isCameraOpen) {
       const getCameraPermission = async () => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'environment' },
           });
           setHasCameraPermission(true);
-
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
           }
@@ -46,13 +55,11 @@ export function IngredientForm({
           toast({
             variant: 'destructive',
             title: 'Camera Access Denied',
-            description:
-              'Please enable camera permissions in your browser settings.',
+            description: 'Please enable camera permissions in your browser settings.',
           });
-          setIsCapturing(false);
+          setIsCameraOpen(false);
         }
       };
-
       getCameraPermission();
 
       return () => {
@@ -62,22 +69,12 @@ export function IngredientForm({
         }
       };
     }
-  }, [isCapturing, toast]);
-  
-  useEffect(() => {
-     if (!pending) {
-       setImagePreview(null);
-       setCapturedImageFile(null);
-       if (fileInputRef.current) {
-         fileInputRef.current.value = '';
-       }
-     }
-   }, [pending]);
+  }, [isCameraOpen, toast]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setCapturedImageFile(null); 
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -85,7 +82,7 @@ export function IngredientForm({
       reader.readAsDataURL(file);
     }
   };
-  
+
   const handleCapture = () => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
@@ -96,136 +93,125 @@ export function IngredientForm({
       if (context) {
         context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
         const dataUri = canvas.toDataURL('image/png');
-        setImagePreview(dataUri);
         
         fetch(dataUri)
           .then(res => res.blob())
           .then(blob => {
             const file = new File([blob], "capture.png", { type: "image/png" });
-            setCapturedImageFile(file);
-            if (fileInputRef.current) {
-              fileInputRef.current.value = "";
-            }
+            setImageFile(file);
+            setImagePreview(dataUri);
           });
       }
-      setIsCapturing(false);
+      setIsCameraOpen(false);
     }
   };
 
-  const handleFormAction = (formData: FormData) => {
-    if (capturedImageFile) {
-      formData.set('image', capturedImageFile);
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(formRef.current!);
+    if (imageFile) {
+        formData.set('image', imageFile);
     }
     formAction(formData);
+  };
+  
+  const handleRemoveImage = () => {
+      setImageFile(null);
+      setImagePreview(null);
+      if(fileInputRef.current) {
+          fileInputRef.current.value = '';
+      }
   }
 
   return (
-    <div className="w-full space-y-8 text-center animate-in fade-in-50 duration-500">
-      <div className="flex flex-col items-center gap-4">
-        <Logo className="h-16 w-16 text-accent" />
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-neutral-400">
-          Ingredient Insights AI
-        </h1>
-        <p className="text-lg md:text-xl text-neutral-300 max-w-md">
-          Paste an ingredient list or snap a photo to understand what you're really eating.
-        </p>
-      </div>
+    <div className="w-full space-y-4">
+      {imagePreview && (
+        <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-primary/30">
+          <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+          <Button
+            type="button"
+            variant="destructive"
+            size="icon"
+            className="absolute top-1 right-1 h-6 w-6"
+            onClick={handleRemoveImage}
+          >
+            <Send className="h-3 w-3" />
+            <span className="sr-only">Remove image</span>
+          </Button>
+        </div>
+      )}
+      <form ref={formRef} onSubmit={handleSubmit} className="relative">
+        <div className="relative flex items-center w-full">
+            <Textarea
+              name="ingredients"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Paste an ingredient list or upload a photo to understand what you're really eating."
+              className="w-full rounded-xl bg-card/80 border-primary/20 p-4 pr-28 text-base resize-none focus:ring-0 focus:outline-none focus:border-primary/50 transition-colors"
+              rows={1}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  formRef.current?.requestSubmit();
+                }
+              }}
+            />
 
-      <form ref={formRef} action={handleFormAction} className="space-y-6">
-        <Tabs defaultValue="text" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="text">Text Input</TabsTrigger>
-            <TabsTrigger value="image">Image Upload</TabsTrigger>
-          </TabsList>
-          <TabsContent value="text">
-            <Card className="bg-card/50 border-primary/20">
-              <CardContent className="p-4">
-                <Textarea
-                  name="ingredients"
-                  placeholder="e.g. Enriched flour, high fructose corn syrup, palm oil, salt, artificial flavors..."
-                  className="min-h-[150px] w-full rounded-xl bg-transparent p-0 text-base backdrop-blur-sm focus:ring-0 focus:outline-none border-0"
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                <Dialog open={isCameraOpen} onOpenChange={setIsCameraOpen}>
+                    <DialogTrigger asChild>
+                        <Button type="button" variant="ghost" size="icon">
+                            <Camera className="h-5 w-5" />
+                            <span className="sr-only">Use Camera</span>
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                            <DialogTitle>Use Camera</DialogTitle>
+                        </DialogHeader>
+                         <div className="space-y-4">
+                            <video ref={videoRef} className="w-full aspect-video rounded-md bg-black" autoPlay muted playsInline/>
+                            {hasCameraPermission === false && (
+                                <Alert variant="destructive">
+                                    <AlertTitle>Camera Access Required</AlertTitle>
+                                    <AlertDescription>
+                                        Please allow camera access to use this feature.
+                                    </AlertDescription>
+                                </Alert>
+                            )}
+                            <div className="flex justify-center gap-4">
+                                <Button type="button" onClick={handleCapture} disabled={!hasCameraPermission}>
+                                    <Camera className="mr-2" /> Capture
+                                </Button>
+                            </div>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+
+                <Button type="button" variant="ghost" size="icon" onClick={() => fileInputRef.current?.click()}>
+                    <Paperclip className="h-5 w-5" />
+                    <span className="sr-only">Upload Image</span>
+                </Button>
+                <input
+                    type="file"
+                    name="image"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleFileChange}
                 />
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="image">
-            <Card className="bg-card/50 border-primary/20">
-              <CardContent className="p-4 space-y-4">
-                {isCapturing ? (
-                   <div className="space-y-4">
-                    <video ref={videoRef} className="w-full aspect-video rounded-md" autoPlay muted playsInline/>
-                     {hasCameraPermission === false && (
-                        <Alert variant="destructive">
-                            <AlertTitle>Camera Access Required</AlertTitle>
-                            <AlertDescription>
-                                Please allow camera access to use this feature.
-                            </AlertDescription>
-                        </Alert>
-                    )}
-                     <div className="flex justify-center gap-4">
-                        <Button type="button" onClick={handleCapture} disabled={!hasCameraPermission}>
-                            <Camera className="mr-2" /> Capture
-                        </Button>
-                        <Button type="button" variant="outline" onClick={() => setIsCapturing(false)}>
-                            Cancel
-                        </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="flex items-center justify-center w-full">
-                      <label
-                        htmlFor="file-upload"
-                        className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-card/50 border-primary/30 hover:bg-card/80"
-                      >
-                        {imagePreview ? (
-                          <img
-                            src={imagePreview}
-                            alt="Image preview"
-                            className="object-contain h-full w-full rounded-lg"
-                          />
-                        ) : (
-                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <Upload className="w-8 h-8 mb-4 text-neutral-400" />
-                            <p className="mb-2 text-sm text-neutral-400">
-                              <span className="font-semibold">Click to upload</span> or drag and drop
-                            </p>
-                            <p className="text-xs text-neutral-500">PNG, JPG, or WEBP</p>
-                          </div>
-                        )}
-                        <input
-                          id="file-upload"
-                          name="image"
-                          type="file"
-                          className="hidden"
-                          accept="image/*"
-                          ref={fileInputRef}
-                          onChange={handleFileChange}
-                        />
-                      </label>
-                    </div>
-                    <Button type="button" onClick={() => setIsCapturing(true)} className="w-full">
-                      <Camera className="mr-2" />
-                      Use Camera
-                    </Button>
-                  </>
-                )}
-                 <canvas ref={canvasRef} className="hidden" />
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
 
-        <Button
-          type="submit"
-          size="lg"
-          className="w-full md:w-auto bg-accent text-accent-foreground font-bold hover:bg-accent/90 hover:shadow-glow-accent transition-all duration-300"
-          disabled={pending}
-        >
-          <Sparkles className="mr-2 h-5 w-5" />
-          Analyze Ingredients
-        </Button>
+                <Button type="submit" size="icon" disabled={isPending || (!text && !imageFile)} className="bg-accent text-accent-foreground rounded-full">
+                    <Send className="h-5 w-5" />
+                    <span className="sr-only">Analyze</span>
+                </Button>
+            </div>
+             <canvas ref={canvasRef} className="hidden" />
+        </div>
       </form>
+      <p className="text-xs text-center text-neutral-500">
+        Ingredient Insights AI can make mistakes. Consider checking important information.
+      </p>
     </div>
   );
 }

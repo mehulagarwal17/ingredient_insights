@@ -1,19 +1,19 @@
 'use client';
 
 import * as React from 'react';
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useEffect } from 'react';
 import { analyzeIngredients, type FormState } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { IngredientForm } from '@/components/ingredient-form';
 import { ResultsDisplay } from '@/components/results-display';
 import { LoadingAnimation } from './loading-animation';
+import { Logo } from './icons';
 
 const initialState: FormState = { type: 'initial' };
 
-function AnalysisSection({ onReset }: { onReset: () => void }) {
+export function IngredientAnalysis() {
   const [state, formAction, isPending] = useActionState(analyzeIngredients, initialState);
   const { toast } = useToast();
-  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (state.type === 'error' && state.message) {
@@ -23,32 +23,36 @@ function AnalysisSection({ onReset }: { onReset: () => void }) {
         description: state.message,
       });
     }
-    if (state.type === 'success') {
-      // Reset the form for the next submission
-      formRef.current?.reset();
-    }
   }, [state, toast]);
 
+  const showWelcome = !isPending && state.type === 'initial';
+
   return (
-    <div className="space-y-8">
-      <IngredientForm formAction={formAction} formRef={formRef} />
+    <div className="w-full h-full max-w-4xl mx-auto flex flex-col justify-end">
       {isPending && (
-        <div className="flex items-center justify-center min-h-[40vh]">
+        <div className="flex-1 flex items-center justify-center">
           <LoadingAnimation />
         </div>
       )}
-      {state.type === 'success' && state.data && (
-        <ResultsDisplay data={state.data} onReset={onReset} />
+
+      {showWelcome && (
+         <div className="flex-1 flex flex-col items-center justify-center text-center -mt-24">
+            <Logo className="h-20 w-20 text-accent" />
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-neutral-400 mt-4">
+                How can I help you today?
+            </h1>
+         </div>
       )}
+
+      {state.type === 'success' && state.data && (
+        <div className="flex-1 overflow-y-auto p-4">
+          <ResultsDisplay data={state.data} onReset={() => {}} />
+        </div>
+      )}
+
+      <div className="py-4">
+        <IngredientForm formAction={formAction} isPending={isPending} />
+      </div>
     </div>
   );
-}
-
-
-export function IngredientAnalysis() {
-  // The key is used to force a re-render of the AnalysisSection to reset its state
-  const [key, setKey] = React.useState(0);
-  const handleReset = () => setKey(prev => prev + 1);
-
-  return <AnalysisSection key={key} onReset={handleReset} />;
 }
