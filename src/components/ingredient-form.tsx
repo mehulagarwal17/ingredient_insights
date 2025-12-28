@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, type FormEvent } from 'react';
 import { Button } from './ui/button';
-import { Paperclip, Send, Camera } from 'lucide-react';
+import { Paperclip, Send, Camera, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from './ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
@@ -135,7 +135,7 @@ export function IngredientForm({
             className="absolute top-1 right-1 h-6 w-6"
             onClick={handleRemoveImage}
           >
-            <Send className="h-3 w-3" />
+            <X className="h-3 w-3" />
             <span className="sr-only">Remove image</span>
           </Button>
         </div>
