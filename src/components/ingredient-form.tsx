@@ -110,7 +110,7 @@ export function IngredientForm({
       }
   }
 
-  const hasContent = !!text || !!(fileInputRef.current?.files && fileInputRef.current.files.length > 0);
+  const hasContent = !!text || !!(fileInputRef.current?.files && fileInputRef.current.files.length > 0 && fileInputRef.current.files[0].size > 0);
 
   return (
     <Card className="w-full bg-card/40 border-primary/10 shadow-lg shadow-primary/5 p-4 space-y-4">
@@ -129,7 +129,7 @@ export function IngredientForm({
           </Button>
         </div>
       )}
-      <form ref={formRef} id="ingredient-form" action={formAction} className="relative">
+      <form ref={formRef} action={formAction} className="relative space-y-4">
         <div className="relative flex items-center w-full">
             <Textarea
               name="ingredients"
@@ -195,22 +195,21 @@ export function IngredientForm({
             </div>
              <canvas ref={canvasRef} className="hidden" />
         </div>
+        <div className="flex flex-col items-center gap-4">
+            <Button 
+                type="submit"
+                size="lg" 
+                disabled={isPending || !hasContent} 
+                className="w-full sm:w-auto bg-primary/90 hover:bg-primary text-primary-foreground shadow-md shadow-primary/20"
+            >
+                <Send className="h-4 w-4 mr-2" />
+                Analyze
+            </Button>
+            <p className="text-xs text-center text-neutral-500">
+                Ingredient Insights AI can make mistakes. Consider checking important information.
+            </p>
+        </div>
       </form>
-      <div className="flex flex-col items-center gap-4">
-        <Button 
-            type="submit"
-            form="ingredient-form"
-            size="lg" 
-            disabled={isPending || !hasContent} 
-            className="w-full sm:w-auto bg-primary/90 hover:bg-primary text-primary-foreground shadow-md shadow-primary/20"
-        >
-            <Send className="h-4 w-4 mr-2" />
-            Analyze
-        </Button>
-        <p className="text-xs text-center text-neutral-500">
-            Ingredient Insights AI can make mistakes. Consider checking important information.
-        </p>
-      </div>
     </Card>
   );
 }

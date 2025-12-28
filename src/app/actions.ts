@@ -29,7 +29,7 @@ export async function analyzeIngredients(
 ): Promise<FormState> {
   try {
     const ingredients = formData.get('ingredients') as string | undefined;
-    const image = formData.get('image') as File | undefined;
+    const image = formData.get('image') as File | null;
 
     if (!ingredients && (!image || image.size === 0)) {
       return {
@@ -38,8 +38,11 @@ export async function analyzeIngredients(
       };
     }
 
-    const photoDataUri = (image && image.size > 0) ? await toDataURI(image) : undefined;
-
+    let photoDataUri: string | undefined = undefined;
+    if (image instanceof File && image.size > 0) {
+      photoDataUri = await toDataURI(image);
+    }
+    
     const result = await highlightConcerningIngredients({
       ingredientsText: ingredients,
       photoDataUri: photoDataUri,
