@@ -28,28 +28,10 @@ export async function analyzeIngredients(
   formData: FormData
 ): Promise<FormState> {
   try {
-    const validatedFields = inputSchema.safeParse({
-      ingredients: formData.get('ingredients') || undefined,
-      image: formData.get('image') || undefined,
-    });
+    const ingredients = formData.get('ingredients') as string | undefined;
+    const image = formData.get('image') as File | undefined;
 
-    if (!validatedFields.success) {
-      return {
-        type: 'error',
-        message: 'Invalid input.',
-      };
-    }
-
-    const {ingredients, image} = validatedFields.data;
-
-    if (!ingredients && !image) {
-      return {
-        type: 'error',
-        message: 'Please enter ingredients or upload an image.',
-      };
-    }
-    
-    if (image && image.size === 0) {
+    if (!ingredients && (!image || image.size === 0)) {
       return {
         type: 'error',
         message: 'Please enter ingredients or upload an image.',
@@ -58,7 +40,7 @@ export async function analyzeIngredients(
 
     const result = await highlightConcerningIngredients({
       ingredientsText: ingredients,
-      photoDataUri: image ? await toDataURI(image) : undefined,
+      photoDataUri: image && image.size > 0 ? await toDataURI(image) : undefined,
     });
 
     if (!result) {

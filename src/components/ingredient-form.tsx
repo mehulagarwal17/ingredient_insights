@@ -24,7 +24,6 @@ export function IngredientForm({
   
   const [text, setText] = useState('');
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
@@ -73,7 +72,6 @@ export function IngredientForm({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -83,7 +81,7 @@ export function IngredientForm({
   };
 
   const handleCapture = () => {
-    if (videoRef.current && canvasRef.current) {
+    if (videoRef.current && canvasRef.current && fileInputRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
       canvas.width = video.videoWidth;
@@ -91,27 +89,28 @@ export function IngredientForm({
       const context = canvas.getContext('2d');
       if (context) {
         context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-        const dataUri = canvas.toDataURL('image/png');
-        
-        fetch(dataUri)
-          .then(res => res.blob())
-          .then(blob => {
+        canvas.toBlob((blob) => {
+          if (blob) {
             const file = new File([blob], "capture.png", { type: "image/png" });
-            setImageFile(file);
-            setImagePreview(dataUri);
-          });
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInputRef.current!.files = dataTransfer.files;
+            setImagePreview(canvas.toDataURL('image/png'));
+          }
+        }, 'image/png');
       }
       setIsCameraOpen(false);
     }
   };
   
   const handleRemoveImage = () => {
-      setImageFile(null);
       setImagePreview(null);
       if(fileInputRef.current) {
           fileInputRef.current.value = '';
       }
   }
+
+  const hasContent = !!text || !!(fileInputRef.current?.files && fileInputRef.current.files.length > 0);
 
   return (
     <Card className="w-full bg-card/40 border-primary/10 shadow-lg shadow-primary/5 p-4 space-y-4">
@@ -130,7 +129,7 @@ export function IngredientForm({
           </Button>
         </div>
       )}
-      <form ref={formRef} action={formAction} className="relative">
+      <form ref={formRef} id="ingredient-form" action={formAction} className="relative">
         <div className="relative flex items-center w-full">
             <Textarea
               name="ingredients"
@@ -200,9 +199,9 @@ export function IngredientForm({
       <div className="flex flex-col items-center gap-4">
         <Button 
             type="submit"
-            form={formRef.current ?? undefined}
+            form="ingredient-form"
             size="lg" 
-            disabled={isPending || (!text && !imageFile)} 
+            disabled={isPending || !hasContent} 
             className="w-full sm:w-auto bg-primary/90 hover:bg-primary text-primary-foreground shadow-md shadow-primary/20"
         >
             <Send className="h-4 w-4 mr-2" />
