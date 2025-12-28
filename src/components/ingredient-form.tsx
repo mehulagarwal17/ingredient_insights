@@ -25,6 +25,8 @@ export function IngredientForm({
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+  const [capturedImageFile, setCapturedImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (isCapturing) {
@@ -65,6 +67,7 @@ export function IngredientForm({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setCapturedImageFile(null); // Clear captured image if a file is selected
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -85,15 +88,15 @@ export function IngredientForm({
         const dataUri = canvas.toDataURL('image/png');
         setImagePreview(dataUri);
         
-        // Convert data URI to file and set it in the form
+        // Convert data URI to file and set it in state
         fetch(dataUri)
           .then(res => res.blob())
           .then(blob => {
             const file = new File([blob], "capture.png", { type: "image/png" });
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
+            setCapturedImageFile(file);
+            // Clear file input if a capture is made
             if (fileInputRef.current) {
-              fileInputRef.current.files = dataTransfer.files;
+              fileInputRef.current.value = "";
             }
           });
       }
@@ -101,7 +104,12 @@ export function IngredientForm({
     }
   };
 
-  const formRef = useRef<HTMLFormElement>(null);
+  const handleFormAction = (formData: FormData) => {
+    if (capturedImageFile) {
+      formData.set('image', capturedImageFile);
+    }
+    formAction(formData);
+  }
 
   if (pending) {
     return (
@@ -123,7 +131,7 @@ export function IngredientForm({
         </p>
       </div>
 
-      <form ref={formRef} action={formAction} className="space-y-6">
+      <form ref={formRef} action={handleFormAction} className="space-y-6">
         <Tabs defaultValue="text" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="text">Text Input</TabsTrigger>
