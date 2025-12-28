@@ -69,7 +69,7 @@ You will be given either a text list of ingredients, or an image of a food label
 If you receive an image:
 1.  **Prioritize the Ingredient List:** Your primary goal is to find and analyze the ingredient list. Look for a heading like "Ingredients:", "INGREDIENTS", or similar.
 2.  **Analyze Ingredients:** If you find an ingredient list, identify any ingredients that might be of concern to health-conscious users. Explain why each ingredient might be concerning and provide a confidence level for your assessment (high, medium, or low).
-3.  **Fallback to Nutrition Facts:** If you **cannot** find an ingredient list, look for a "Nutrition Facts" table. If you find one, analyze its contents. Provide a summary highlighting key values like calories, fat, sugar, and sodium. The summary should be a single string with each fact separated by a period.
+3.  **Fallback to Nutrition Facts:** If you **cannot** find an ingredient list, look for a "Nutrition Facts" table. If you find one, analyze its contents. For the summary, provide a single string where each key fact is separated by a period. Example: "This product is high in sodium. This product is a good source of fiber."
 4.  **Handle Failure:** If you cannot find an ingredient list OR a nutrition facts table, state that in the summary and uncertainty note.
 
 If you are given a text list of ingredients, analyze it for concerning ingredients as described in step 2.

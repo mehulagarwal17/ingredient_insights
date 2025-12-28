@@ -36,6 +36,7 @@ const confidenceConfig = {
 };
 
 const NutritionFact: React.FC<{ fact: string }> = ({ fact }) => {
+  if (!fact) return null;
   const factLower = fact.toLowerCase();
   let icon = <Equal className="text-neutral-400" />;
   if (factLower.includes('low') || factLower.includes('good source')) {
@@ -47,7 +48,7 @@ const NutritionFact: React.FC<{ fact: string }> = ({ fact }) => {
   return (
     <li className="flex items-start gap-3">
       <div className="mt-1 h-5 w-5 flex-shrink-0">{icon}</div>
-      <p className="text-neutral-200">{fact.trim()}.</p>
+      <p className="text-neutral-200">{fact.trim()}{fact.endsWith('.') ? '' : '.'}</p>
     </li>
   );
 };
@@ -60,7 +61,8 @@ export function ResultsDisplay({
   data: HighlightConcerningIngredientsOutput;
   onReset: () => void;
 }) {
-  const isNutritionAnalysis = data.highlights.length === 0 && data.summary.toLowerCase().includes('nutrition');
+  const isNutritionAnalysis = data.highlights.length === 0 && data.uncertaintyNote?.toLowerCase().includes('nutrition');
+  
   const nutritionFacts = isNutritionAnalysis
     ? data.summary.split('.').filter(s => s.trim().length > 0)
     : [];
