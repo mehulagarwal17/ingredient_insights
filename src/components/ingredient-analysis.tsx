@@ -29,7 +29,7 @@ export function IngredientAnalysis() {
   const showResults = state.type === 'success' && state.data;
 
   return (
-    <div className="flex flex-col h-full w-full max-w-4xl mx-auto">
+    <div className="flex flex-col h-full w-full">
       <div className="flex-1 overflow-y-auto p-4">
         {isPending && (
           <div className="flex h-full items-center justify-center">
@@ -49,7 +49,7 @@ export function IngredientAnalysis() {
         {showResults && <ResultsDisplay data={state.data} onReset={() => {}} />}
       </div>
 
-      <div className="p-4 w-full">
+      <div className="p-4 w-full max-w-4xl mx-auto">
         <IngredientForm formAction={formAction} isPending={isPending} />
       </div>
     </div>
