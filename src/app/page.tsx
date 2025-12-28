@@ -7,7 +7,7 @@ import { Bot, MessageSquarePlus, History } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen bg-background">
       <Sidebar>
         <SidebarContent>
           <SidebarHeader>
@@ -34,13 +34,11 @@ export default function Home() {
         </SidebarContent>
       </Sidebar>
       <SidebarInset>
-        <main className="flex-1 flex flex-col p-4 relative">
-            <div className="absolute top-4 left-4">
+        <main className="flex-1 flex flex-col h-screen relative">
+            <div className="absolute top-4 left-4 z-10">
                 <SidebarTrigger />
             </div>
-            <div className="flex-1 flex items-center justify-center">
-                 <IngredientAnalysis />
-            </div>
+            <IngredientAnalysis />
         </main>
       </SidebarInset>
     </div>

@@ -26,31 +26,30 @@ export function IngredientAnalysis() {
   }, [state, toast]);
 
   const showWelcome = !isPending && state.type === 'initial';
+  const showResults = state.type === 'success' && state.data;
 
   return (
-    <div className="w-full h-full max-w-4xl mx-auto flex flex-col justify-end">
-      {isPending && (
-        <div className="flex-1 flex items-center justify-center">
-          <LoadingAnimation />
-        </div>
-      )}
+    <div className="flex flex-col h-full w-full max-w-4xl mx-auto">
+      <div className="flex-1 overflow-y-auto p-4">
+        {isPending && (
+          <div className="flex h-full items-center justify-center">
+            <LoadingAnimation />
+          </div>
+        )}
 
-      {showWelcome && (
-         <div className="flex-1 flex flex-col items-center justify-center text-center -mt-24">
-            <Logo className="h-20 w-20 text-accent" />
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-neutral-400 mt-4">
-                How can I help you today?
-            </h1>
-         </div>
-      )}
+        {showWelcome && (
+           <div className="flex h-full flex-col items-center justify-center text-center -mt-16">
+              <Logo className="h-20 w-20 text-accent" />
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-neutral-400 mt-4">
+                  How can I help you today?
+              </h1>
+           </div>
+        )}
 
-      {state.type === 'success' && state.data && (
-        <div className="flex-1 overflow-y-auto p-4">
-          <ResultsDisplay data={state.data} onReset={() => {}} />
-        </div>
-      )}
+        {showResults && <ResultsDisplay data={state.data} onReset={() => {}} />}
+      </div>
 
-      <div className="py-4">
+      <div className="p-4 w-full">
         <IngredientForm formAction={formAction} isPending={isPending} />
       </div>
     </div>
