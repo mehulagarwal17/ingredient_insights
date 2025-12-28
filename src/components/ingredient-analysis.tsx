@@ -1,7 +1,6 @@
 'use client';
 
-import { useFormState } from 'react-dom';
-import { useEffect } from 'react';
+import { useActionState, useEffect } from 'react';
 import { analyzeIngredients, type FormState } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { IngredientForm } from '@/components/ingredient-form';
@@ -10,7 +9,7 @@ import { ResultsDisplay } from '@/components/results-display';
 const initialState: FormState = { type: 'initial' };
 
 export function IngredientAnalysis({ onReset }: { onReset: () => void }) {
-  const [state, formAction] = useFormState(analyzeIngredients, initialState);
+  const [state, formAction] = useActionState(analyzeIngredients, initialState);
   const { toast } = useToast();
 
   useEffect(() => {
