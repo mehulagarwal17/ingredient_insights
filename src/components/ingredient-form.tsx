@@ -104,15 +104,6 @@ export function IngredientForm({
       setIsCameraOpen(false);
     }
   };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(formRef.current!);
-    if (imageFile) {
-        formData.set('image', imageFile);
-    }
-    formAction(formData);
-  };
   
   const handleRemoveImage = () => {
       setImageFile(null);
@@ -139,7 +130,7 @@ export function IngredientForm({
           </Button>
         </div>
       )}
-      <form ref={formRef} onSubmit={handleSubmit} className="relative">
+      <form ref={formRef} action={formAction} className="relative">
         <div className="relative flex items-center w-full">
             <Textarea
               name="ingredients"
@@ -208,11 +199,11 @@ export function IngredientForm({
       </form>
       <div className="flex flex-col items-center gap-4">
         <Button 
-            type="submit" 
+            type="submit"
+            form={formRef.current ?? undefined}
             size="lg" 
             disabled={isPending || (!text && !imageFile)} 
             className="w-full sm:w-auto bg-primary/90 hover:bg-primary text-primary-foreground shadow-md shadow-primary/20"
-            onClick={() => formRef.current?.requestSubmit()}
         >
             <Send className="h-4 w-4 mr-2" />
             Analyze
