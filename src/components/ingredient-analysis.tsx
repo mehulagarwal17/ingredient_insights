@@ -30,7 +30,7 @@ export function IngredientAnalysis() {
 
   return (
     <div className="flex flex-col h-full w-full">
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 w-full max-w-4xl mx-auto">
         {isPending && (
           <div className="flex h-full items-center justify-center">
             <LoadingAnimation />
