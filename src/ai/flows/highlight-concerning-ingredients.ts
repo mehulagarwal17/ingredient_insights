@@ -33,7 +33,7 @@ const HighlightConcerningIngredientsOutputSchema = z.object({
     .array(
       z.object({
         ingredient: z.string().describe('The name of the ingredient.'),
-        reason: z.string().describe('Why the ingredient might be concerning.'),
+        reason: z.string().describe('Why it might be concerning.'),
         confidence: z
           .enum(['high', 'medium', 'low'])
           .describe('The confidence level of the AI in its assessment.'),
@@ -62,31 +62,31 @@ const highlightConcerningIngredientsPrompt = ai.definePrompt({
   name: 'highlightConcerningIngredientsPrompt',
   input: {schema: HighlightConcerningIngredientsInputSchema},
   output: {schema: HighlightConcerningIngredientsOutputSchema},
-  prompt: `You are an AI assistant designed to analyze food labels. You can analyze either an ingredient list or a nutrition facts table.
+  prompt: `You are an AI ingredient interpretation co-pilot.
+
+Your job is NOT to list ingredients, NOT to provide nutrition tables, and NOT to act as a chatbot.
+
+Your job is to:
+- Interpret food ingredient information like a thoughtful human expert.
+- Infer what matters to the user without asking them questions.
+- Explain only the most relevant concerns in plain language.
+- Be cautious, evidence-aware, and transparent about uncertainty.
 
 You will be given either a text list of ingredients, or an image of a food label.
 
 If you receive an image:
 1.  **Prioritize the Ingredient List:** Your primary goal is to find and analyze the ingredient list. Look for a heading like "Ingredients:", "INGREDIENTS", or similar.
-2.  **Analyze Ingredients:** If you find an ingredient list, identify any ingredients that might be of concern to health-conscious users. Explain why each ingredient might be concerning and provide a confidence level for your assessment (high, medium, or low).
-3.  **Fallback to Nutrition Facts:** If you **cannot** find an ingredient list, look for a "Nutrition Facts" table. If you find one, analyze its contents. For the summary, provide a single string where each key fact is separated by a period. Example: "This product is high in sodium. This product is a good source of fiber."
-4.  **Handle Failure:** If you cannot find an ingredient list OR a nutrition facts table, state that in the summary and uncertainty note.
+2.  **Analyze Ingredients:** If you find an ingredient list, identify any ingredients that might be of concern to health-conscious users. For each, provide the ingredient, a reason it matters, and a confidence level.
+3.  **Fallback to Nutrition Facts:** If you **cannot** find an ingredient list, look for a "Nutrition Facts" table. Analyze its contents to provide an expert interpretation.
+    -   Generate a thoughtful **summary** of the product's nutritional profile.
+    -   Create **highlights** for the 2-3 most relevant nutritional components (e.g., "Sodium", "Carbohydrates", "Dietary Fiber"). For each highlight, explain the 'reason' it's relevant (e.g., "One serving contains a relatively high amount...").
+    -   Provide an **uncertaintyNote** about the limitations of nutrition labels.
+    -   Suggest 1-2 actionable **suggestedActions**.
+4.  **Handle Failure:** If you cannot find an ingredient list OR a nutrition facts table, state that in the summary and uncertainty note, and leave highlights and suggested actions empty.
 
 If you are given a text list of ingredients, analyze it for concerning ingredients as described in step 2.
 
-Output a JSON object in the following format:
-\{
-  "summary": "High-level summary of the analysis (either ingredients or nutrition facts)",
-  "highlights": [ // Populate this only if analyzing an ingredient list
-    \{
-      "ingredient": "Ingredient name",
-      "reason": "Why it matters",
-      "confidence": "high | medium | low"
-    \}
-  ],
-  "uncertaintyNote": "string or null",
-  "suggestedActions": ["string"]
-\}
+Your final output MUST be a JSON object matching the specified output schema.
 
 {{#if ingredientsText}}
 Ingredient List:
