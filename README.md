@@ -85,31 +85,38 @@ Upload food labels or paste ingredient lists to get clear, human-friendly explan
 
 ### Installation
 
-#### 1️⃣ Clone the repository
+### 1️⃣ Clone the repository
 ```bash
 git clone https://github.com/mehulagarwal17/ingredient_insights.git
 cd ingredient_insights
-2️⃣ Install frontend dependencies
-bash
-Copy code
+```
+
+
+#### 2️⃣ Install frontend dependencies
+
+```bash
 npm install
-3️⃣ Setup backend
-bash
-Copy code
+```
+
+
+#### 3️⃣ Setup backend
+```bash
 cd chat_backend
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
-4️⃣ Setup environment variables
-bash
-Copy code
+```
+
+#### 4️⃣ Setup environment variables
+```bash
 cp .env.example .env.local
+```
 Add your Clerk keys and AI API keys.
 
 5️⃣ Run the app
-bash
-Copy code
+```
 npm run dev
+```
 Open: http://localhost:3000
 
 🎯 Usage
@@ -159,7 +166,8 @@ ingredient_insights/
 │   └── manage.py
 │
 └── README.md
-🎨 Design System
+
+🎨 Design System:
 🌈 Colors
 Primary: Cyan #00FFFF
 
@@ -181,13 +189,15 @@ Micro-interactions
 🔧 Configuration
 Environment Variables
 env
-Copy code
+```
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
 CLERK_SECRET_KEY=
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
+```
+
 Django
 Configure DB in chat_backend/chatbackend/settings.py
 
@@ -197,41 +207,37 @@ Add AI API keys
 
 🚀 Deployment
 Frontend (Vercel)
-bash
-Copy code
+```
 npm run build
 vercel --prod
+```
+
 Backend (Heroku / DigitalOcean)
-bash
-Copy code
+```
 python manage.py collectstatic
 gunicorn chatbackend.wsgi:application
+```
+
 🤝 Contributing
 Fork the repo
 
 Create a branch
 
-bash
-Copy code
+```
 git checkout -b feature/YourFeature
-Commit changes
+```
 
-bash
-Copy code
+Commit changes
+```
 git commit -m "Add YourFeature"
 Push and open a PR
+```
 
 📄 License
 MIT License.
 See LICENSE for details.
 
-yaml
-Copy code
 
----
-
-That’s it.  
-If you paste this and someone still says “README unclear”, that’s on them, not you.
 
 
 
