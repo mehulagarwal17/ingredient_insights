@@ -4,78 +4,78 @@
 
 @layer base {
   :root {
-    --background: 224 71% 4%; /* Dark Navy */
-    --foreground: 210 40% 98%;
+    --background: 220 13% 3%; /* Deep Black */
+    --foreground: 210 100% 95%; /* Bright White */
 
-    --card: 223 47% 11%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 13% 7%;
+    --card-foreground: 210 100% 95%;
 
-    --popover: 224 71% 4%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 220 13% 3%;
+    --popover-foreground: 210 100% 95%;
 
-    --primary: 231 50% 58%; /* Indigo */
-    --primary-foreground: 210 40% 98%;
+    --primary: 200 100% 50%; /* Neon Cyan/Blue */
+    --primary-foreground: 220 13% 3%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 220 13% 12%;
+    --secondary-foreground: 210 100% 85%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 220 13% 12%;
+    --muted-foreground: 210 100% 65%;
 
-    --accent: 262 100% 79%; /* Electric Purple */
-    --accent-foreground: 224 71% 4%;
+    --accent: 200 100% 50%; /* Neon Cyan/Blue */
+    --accent-foreground: 220 13% 3%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 100% 95%;
     
-    --border: 231 50% 58% / 0.2;
-    --input: 231 50% 58% / 0.2;
-    --ring: 262 100% 79%;
-    --radius: 0.8rem;
+    --border: 200 100% 50% / 0.15;
+    --input: 200 100% 50% / 0.15;
+    --ring: 200 100% 50%;
+    --radius: 0.5rem;
 
-    --sidebar-background: 226 50% 8%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-border: 231 50% 58% / 0.1;
-    --sidebar-ring: 262 100% 79%;
-    --sidebar-accent: 231 50% 58% / 0.15;
-    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-background: 220 13% 5%;
+    --sidebar-foreground: 210 100% 85%;
+    --sidebar-border: 200 100% 50% / 0.1;
+    --sidebar-ring: 200 100% 50%;
+    --sidebar-accent: 200 100% 50% / 0.1;
+    --sidebar-accent-foreground: 210 100% 95%;
   }
  
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 210 40% 98%;
+    --background: 220 13% 3%;
+    --foreground: 210 100% 95%;
 
-    --card: 223 47% 11%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 13% 7%;
+    --card-foreground: 210 100% 95%;
 
-    --popover: 224 71% 4%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 220 13% 3%;
+    --popover-foreground: 210 100% 95%;
 
-    --primary: 231 50% 58%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 200 100% 50%;
+    --primary-foreground: 220 13% 3%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 220 13% 12%;
+    --secondary-foreground: 210 100% 85%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 220 13% 12%;
+    --muted-foreground: 210 100% 65%;
 
-    --accent: 262 100% 79%;
-    --accent-foreground: 224 71% 4%;
+    --accent: 200 100% 50%;
+    --accent-foreground: 220 13% 3%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 100% 95%;
     
-    --border: 231 50% 58% / 0.2;
-    --input: 231 50% 58% / 0.2;
-    --ring: 262 100% 79%;
+    --border: 200 100% 50% / 0.15;
+    --input: 200 100% 50% / 0.15;
+    --ring: 200 100% 50%;
 
-    --sidebar-background: 226 50% 8%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-border: 231 50% 58% / 0.1;
-    --sidebar-ring: 262 100% 79%;
-    --sidebar-accent: 231 50% 58% / 0.15;
-    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-background: 220 13% 5%;
+    --sidebar-foreground: 210 100% 85%;
+    --sidebar-border: 200 100% 50% / 0.1;
+    --sidebar-ring: 200 100% 50%;
+    --sidebar-accent: 200 100% 50% / 0.1;
+    --sidebar-accent-foreground: 210 100% 95%;
   }
 }
 
@@ -85,5 +85,153 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Neon glow effects */
+  .neon-border {
+    @apply border border-primary/30 shadow-[0_0_20px_rgba(0,255,255,0.3)];
+  }
+  
+  .neon-text {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+  }
+  
+  .neon-button {
+    @apply bg-primary text-primary-foreground transition-all duration-300;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  }
+  
+  .neon-button:hover {
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
+    transform: translateY(-1px);
+  }
+  
+  .cyber-grid {
+    background-image: 
+      linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  
+  .glass-morphism {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+  }
+  
+  /* Chat message styling */
+  .chat-message-user {
+    @apply bg-primary text-primary-foreground;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+  }
+  
+  .chat-message-assistant {
+    @apply bg-muted text-muted-foreground border border-primary/20;
+  }
+  
+  /* Sidebar enhancements */
+  .sidebar-neon {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
+    border-right: 1px solid rgba(0, 255, 255, 0.2);
+  }
+  
+  /* Form inputs */
+  .neon-input {
+    @apply bg-background border border-primary/30 text-foreground;
+    transition: all 0.3s ease;
+  }
+  
+  .neon-input:focus {
+    @apply border-primary;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+  }
+  
+  .neon-input::placeholder {
+    @apply text-gray-500;
+  }
+  
+  /* Force gray placeholder for ingredient form */
+  textarea[name="ingredients"]::placeholder {
+    color: rgb(107, 114, 128) !important;
+    opacity: 1 !important;
+  }
+  
+  /* Force delete icons to be neon blue */
+  .trash-icon {
+    color: rgb(0, 255, 255) !important;
+  }
+  
+  /* Modern dotted grid background texture for main content */
+  .main-content-bg {
+    background-color: rgba(0, 0, 0, 0.95);
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(128, 128, 128, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(128, 128, 128, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 20%, rgba(128, 128, 128, 0.12) 0%, transparent 50%),
+      radial-gradient(circle, rgba(128, 128, 128, 0.8) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 15px 15px;
+    background-position: 0 0, 0 0, 0 0, 0 0;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Strong override for chat area to hide dotted background */
+  .chat-black-bg {
+    background: rgb(0, 0, 0) !important;
+    background-image: none !important;
+    position: relative !important;
+    z-index: 10 !important;
+  }
+  
+  .chat-black-bg::before {
+    display: none !important;
+  }
+  
+  .main-content-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 25% 25%, rgba(128, 128, 128, 0.2) 0%, transparent 25%),
+      radial-gradient(circle at 75% 75%, rgba(128, 128, 128, 0.15) 0%, transparent 25%);
+    background-size: 100% 100%, 100% 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+  
+  .main-content-bg > * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Animated dots background pattern */
+  .dots-pattern {
+    background-image: radial-gradient(circle, rgba(128, 128, 128, 0.15) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+  }
+  
+  /* Scrollbar styling */
+  .neon-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .neon-scrollbar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .neon-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.5);
+    border-radius: 4px;
+  }
+  
+  .neon-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 255, 0.7);
   }
 }

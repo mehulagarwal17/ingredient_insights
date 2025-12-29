@@ -1,6 +1,6 @@
 'use client';
 
-import type { HighlightConcerningIngredientsOutput } from '@/ai/flows/highlight-concerning-ingredients';
+import type { HighlightConcerningIngredientsOutput } from '@/app/actions';
 import {
   Bot,
   AlertTriangle,
@@ -72,9 +72,17 @@ export function ResultsDisplay({
   return (
     <div className="w-full max-w-4xl mx-auto animate-in fade-in-50 duration-500 space-y-8 px-4 py-12">
        <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-                <FileText className="h-7 w-7 text-primary" />
-                <h1 className="text-2xl font-semibold text-foreground">Analysis Results</h1>
+            <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-primary/20 to-cyan-500/20 border border-primary/30">
+                    <Bot className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                    <h1 className="text-2xl font-semibold text-foreground">
+                      <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(0,255,255,0.5)]">Tatva</span>
+                      <span className="text-white ml-1">.ai</span> Analysis
+                    </h1>
+                    <p className="text-sm text-muted-foreground">Your friendly nutrition assistant</p>
+                </div>
             </div>
             <Button variant="ghost" onClick={onReset}>
                 <RotateCcw className="mr-2 h-4 w-4" />
@@ -84,9 +92,12 @@ export function ResultsDisplay({
        
        <div className="space-y-8">
           {isNutritionAnalysis ? (
-            <Card className="bg-card/50">
+            <Card className="bg-gradient-to-br from-card/50 to-card/30 border-border/50 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle>Nutrition Summary</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-primary" />
+                    Nutrition Overview
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
@@ -97,58 +108,75 @@ export function ResultsDisplay({
               </CardContent>
             </Card>
           ) : (
-             <Card className="bg-card/50">
+             <Card className="bg-gradient-to-br from-card/50 to-card/30 border-border/50 backdrop-blur-sm">
                 <CardHeader>
                     <CardTitle className='flex items-center gap-3'>
-                        <Avatar className='h-8 w-8'>
-                            <AvatarFallback><Bot /></AvatarFallback>
-                        </Avatar>
-                        <span>AI Summary</span>
+                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary/20 to-cyan-500/20">
+                            <Bot className="h-5 w-5 text-primary" />
+                        </div>
+                        <div>
+                            <span>What I Found</span>
+                            <p className="text-sm font-normal text-muted-foreground mt-1">Here's what stands out about this product</p>
+                        </div>
                     </CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-lg font-medium text-neutral-100 leading-relaxed">{data.summary}</p>
+                    <div className="prose prose-invert max-w-none">
+                        <p className="text-lg text-neutral-100 leading-relaxed whitespace-pre-wrap">{data.summary}</p>
+                    </div>
                 </CardContent>
             </Card>
           )}
 
           {data.highlights.length > 0 && (
             <section>
-              <h2 className="text-xl font-semibold mb-4 text-neutral-200">
-                Highlighted Ingredients
-              </h2>
-              <Accordion type="multiple" className="w-full space-y-3">
-                {data.highlights.map((highlight, index) => (
-                  <AccordionItem
-                    value={`item-${index}`}
+              <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30">
+                    <AlertTriangle className="h-5 w-5 text-orange-400" />
+                </div>
+                <div>
+                    <h2 className="text-xl font-semibold text-foreground">Ingredients Worth Knowing</h2>
+                    <p className="text-sm text-muted-foreground">Here are a few ingredients that caught my attention</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                {data.highlights.map((highlight: any, index: number) => (
+                  <Card
                     key={index}
-                    className="bg-card/50 border-border rounded-xl overflow-hidden"
+                    className="bg-gradient-to-br from-card/60 to-card/40 border-border/50 backdrop-blur-sm hover:border-primary/40 transition-all duration-300 hover:scale-[1.01] shadow-lg"
                   >
-                    <AccordionTrigger className="p-4 font-semibold hover:no-underline text-base">
-                      <span className="text-left">{highlight.ingredient}</span>
-                    </AccordionTrigger>
-                    <AccordionContent className="p-4 pt-0 space-y-4 border-t border-border">
-                      <div>
-                        <h4 className="font-semibold text-neutral-300 mb-1">
-                          Why it matters
-                        </h4>
-                        <p className="text-neutral-300">{highlight.reason}</p>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4 pb-2">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-primary/20 to-cyan-500/20 border border-primary/30">
+                          {confidenceConfig[highlight.confidence as keyof typeof confidenceConfig]?.icon}
+                        </div>
+                        <CardTitle className="text-lg font-medium text-neutral-50">
+                          {highlight.ingredient}
+                        </CardTitle>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-neutral-300 mb-2">
-                          Confidence Level
-                        </h4>
-                        <div className="flex items-center gap-2">
-                          {confidenceConfig[highlight.confidence]?.icon}
-                          <span className="text-neutral-200">
-                            {confidenceConfig[highlight.confidence]?.label}
-                          </span>
+                      <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-muted/50 border border-border/50">
+                        {confidenceConfig[highlight.confidence as keyof typeof confidenceConfig]?.icon}
+                        <span className="text-xs text-muted-foreground font-medium">
+                          {confidenceConfig[highlight.confidence as keyof typeof confidenceConfig]?.label}
+                        </span>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-2 space-y-4">
+                      <div className="flex items-start gap-3">
+                        <div className="flex items-center justify-center w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 mt-0.5">
+                          <Lightbulb className="h-3 w-3 text-amber-400" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-neutral-300 mb-2 text-sm">
+                            Why this matters
+                          </h4>
+                          <p className="text-neutral-400 leading-relaxed text-sm">{highlight.reason}</p>
                         </div>
                       </div>
-                    </AccordionContent>
-                  </AccordionItem>
+                    </CardContent>
+                  </Card>
                 ))}
-              </Accordion>
+              </div>
             </section>
           )}
 
@@ -166,20 +194,26 @@ export function ResultsDisplay({
 
           {data.suggestedActions.length > 0 && (
             <section>
-              <h2 className="text-xl font-semibold mb-4 text-neutral-200">
-                Suggested Next Steps
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {data.suggestedActions.map((action, index) => (
+              <div className="flex items-center gap-3 mb-6">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30">
+                    <Lightbulb className="h-5 w-5 text-emerald-400" />
+                </div>
+                <div>
+                    <h2 className="text-xl font-semibold text-foreground">Helpful Suggestions</h2>
+                    <p className="text-sm text-muted-foreground">Here are some ideas to consider</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {data.suggestedActions.map((action: string, index: number) => (
                   <Card
                     key={index}
-                    className="bg-card/60 hover:bg-card/90 transition-colors border-primary/20 hover:border-primary/40"
+                    className="bg-gradient-to-br from-card/50 to-card/30 border-border/50 backdrop-blur-sm hover:border-primary/40 transition-all duration-300 hover:scale-[1.02]"
                   >
                     <CardContent className="p-4 flex items-start gap-3">
                       <div className="flex-shrink-0 mt-1">
-                        <Lightbulb className="h-5 w-5 text-accent" />
+                        <Lightbulb className="h-5 w-5 text-emerald-400" />
                       </div>
-                      <p className="text-sm font-medium text-neutral-200">
+                      <p className="text-sm font-medium text-neutral-200 leading-relaxed">
                         {action}
                       </p>
                     </CardContent>

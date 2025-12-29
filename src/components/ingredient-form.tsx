@@ -10,6 +10,41 @@ import { Alert, AlertTitle, AlertDescription } from './ui/alert';
 import { cn } from '@/lib/utils';
 import { Card } from './ui/card';
 
+// Typewriter effect hook
+const useTypewriter = (texts: string[], speed: number = 100) => {
+  const [displayText, setDisplayText] = useState('');
+  const [textIndex, setTextIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentText = texts[textIndex];
+    
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        if (charIndex < currentText.length) {
+          setDisplayText(currentText.substring(0, charIndex + 1));
+          setCharIndex(charIndex + 1);
+        } else {
+          setTimeout(() => setIsDeleting(true), 1500);
+        }
+      } else {
+        if (charIndex > 0) {
+          setDisplayText(currentText.substring(0, charIndex - 1));
+          setCharIndex(charIndex - 1);
+        } else {
+          setIsDeleting(false);
+          setTextIndex((prev) => (prev + 1) % texts.length);
+        }
+      }
+    }, isDeleting ? speed / 2 : speed);
+
+    return () => clearTimeout(timeout);
+  }, [charIndex, isDeleting, textIndex, texts, speed]);
+
+  return displayText;
+};
+
 export function IngredientForm({
   formAction,
   isPending,
@@ -29,6 +64,13 @@ export function IngredientForm({
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   
   const { toast } = useToast();
+  
+  const typewriterText = useTypewriter([
+    "Paste ingredient list or upload a label photo...",
+    "What's in your food?",
+    "Scan a nutrition label...",
+    "Get ingredient insights..."
+  ], 80);
 
   useEffect(() => {
     if (!isPending) {
@@ -135,9 +177,9 @@ export function IngredientForm({
               name="ingredients"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Paste ingredient list or upload a label photo"
+              placeholder={typewriterText}
               className={cn(
-                "w-full rounded-xl bg-background/50 border-primary/20 p-4 pr-32 text-base resize-none focus:ring-0 focus:outline-none focus:border-primary/50 transition-colors",
+                "w-full rounded-xl bg-background/50 border-primary/20 p-4 pr-32 text-base resize-none focus:ring-0 focus:outline-none focus:border-primary/50 transition-colors neon-input placeholder:!text-white placeholder:!opacity-100",
                 "min-h-[56px]"
               )}
               rows={1}
