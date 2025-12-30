@@ -27,10 +27,11 @@ export interface ChatSessionDetail extends ChatSession {
 import { auth } from '@clerk/nextjs/server';
 
 class ApiClient {
-  private getAuthHeaders() {
+  private async getAuthHeaders() {
     // Get the JWT token from Clerk
-    const token = auth().getToken();
-    
+    const authResult = await auth();
+    const token = await authResult.getToken();
+
     return {
       'Authorization': token ? `Bearer ${token}` : '',
       'Content-Type': 'application/json',
@@ -38,8 +39,9 @@ class ApiClient {
   }
 
   async get(endpoint: string) {
+    const headers = await this.getAuthHeaders();
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      headers: this.getAuthHeaders(),
+      headers,
     });
     if (!response.ok) {
       throw new Error(`API Error: ${response.status} - ${response.statusText}`);
@@ -49,9 +51,10 @@ class ApiClient {
   }
 
   async post(endpoint: string, data: any) {
+    const headers = await this.getAuthHeaders();
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
-      headers: this.getAuthHeaders(),
+      headers,
       body: JSON.stringify(data),
     });
     if (!response.ok) {
@@ -61,9 +64,10 @@ class ApiClient {
   }
 
   async delete(endpoint: string) {
+    const headers = await this.getAuthHeaders();
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'DELETE',
-      headers: this.getAuthHeaders(),
+      headers,
     });
     if (!response.ok) {
       throw new Error(`API Error: ${response.status}`);

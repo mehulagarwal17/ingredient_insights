@@ -8,6 +8,7 @@ import { Sidebar, SidebarInset } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 import { AnimatedDotsBackground } from '@/components/animated-dots-background';
 import { SubscriptionPage } from '@/components/subscription-page';
+import { SettingsPage } from '@/components/settings-page';
 import { useChat } from '@/hooks/useChat';
 import { useUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
@@ -17,6 +18,7 @@ export default function Home() {
   const [currentSessionId, setCurrentSessionId] = useState<number | null>(null);
   const [showIngredientAnalysis, setShowIngredientAnalysis] = useState(true);
   const [showSubscription, setShowSubscription] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const { sessions, loadSession } = useChat();
 
@@ -50,19 +52,25 @@ export default function Home() {
 
   const handleSectionChange = (section: string) => {
     setActiveSection(section);
-    
+
     // Handle navigation based on section
     switch (section) {
       case 'home':
         setShowIngredientAnalysis(true);
+        setShowSubscription(false);
+        setShowSettings(false);
         setCurrentSessionId(null);
         break;
       case 'analysis':
         setShowIngredientAnalysis(true);
+        setShowSubscription(false);
+        setShowSettings(false);
         setCurrentSessionId(null);
         break;
       case 'history':
         setShowIngredientAnalysis(false);
+        setShowSubscription(false);
+        setShowSettings(false);
         if (Array.isArray(sessions) && sessions.length > 0 && !currentSessionId) {
           setCurrentSessionId(sessions[0].id);
           loadSession(sessions[0].id);
@@ -71,13 +79,17 @@ export default function Home() {
       case 'subscription':
         setShowIngredientAnalysis(false);
         setShowSubscription(true);
+        setShowSettings(false);
         setCurrentSessionId(null);
         break;
       case 'search':
         // Add search functionality later
         break;
       case 'settings':
-        // Add settings functionality later
+        setShowIngredientAnalysis(false);
+        setShowSubscription(false);
+        setShowSettings(true);
+        setCurrentSessionId(null);
         break;
     }
   };
@@ -101,39 +113,39 @@ export default function Home() {
 
   return (
     <>
-      <AnimatedDotsBackground>
-        <div className="flex h-dvh w-full bg-transparent relative z-10">
-          <AppSidebar 
-            onSessionSelect={handleSessionSelect}
-            currentSessionId={currentSessionId}
-            showIngredientAnalysis={showIngredientAnalysis}
-            onShowIngredientAnalysis={setShowIngredientAnalysis}
-          />
-          <SidebarInset>
-            <main className="flex-1 h-dvh">
-              {showSubscription ? (
-                <SubscriptionPage />
-              ) : showIngredientAnalysis ? (
-                <IngredientAnalysis onAnalysisComplete={handleAnalysisComplete} />
-              ) : currentSessionId ? (
-                <div className="h-full chat-black-bg">
-                  <ChatInterface sessionId={currentSessionId} />
+      <div className="flex h-dvh w-full main-content-bg relative">
+        <AppSidebar
+          onSessionSelect={handleSessionSelect}
+          currentSessionId={currentSessionId}
+          showIngredientAnalysis={showIngredientAnalysis}
+          onShowIngredientAnalysis={setShowIngredientAnalysis}
+        />
+        <SidebarInset className="flex-1">
+          <main className="h-full w-full overflow-auto">
+            {showSettings ? (
+              <SettingsPage />
+            ) : showSubscription ? (
+              <SubscriptionPage />
+            ) : showIngredientAnalysis ? (
+              <IngredientAnalysis onAnalysisComplete={handleAnalysisComplete} />
+            ) : currentSessionId ? (
+              <div className="h-full chat-light-bg">
+                <ChatInterface sessionId={currentSessionId} />
+              </div>
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <div className="text-center">
+                  <h2 className="text-2xl font-semibold mb-4" style={{ fontFamily: "'Outfit', sans-serif", color: 'hsl(25, 30%, 15%)' }}>Select a chat</h2>
+                  <p className="text-muted-foreground">Choose a chat from the sidebar or start a new conversation</p>
                 </div>
-              ) : (
-                <div className="flex h-full items-center justify-center">
-                  <div className="text-center">
-                    <h2 className="text-2xl font-semibold mb-4 neon-text">Select a chat</h2>
-                    <p className="text-muted-foreground">Choose a chat from the sidebar or start a new conversation</p>
-                  </div>
-                </div>
-              )}
-            </main>
-          </SidebarInset>
-        </div>
-      </AnimatedDotsBackground>
-      
+              </div>
+            )}
+          </main>
+        </SidebarInset>
+      </div>
+
       {/* Cylindrical Navigation Bar */}
-      <CylindricalNavbar 
+      <CylindricalNavbar
         activeSection={activeSection}
         onSectionChange={handleSectionChange}
       />
