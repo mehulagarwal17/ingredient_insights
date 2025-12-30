@@ -190,12 +190,20 @@ Micro-interactions
 Environment Variables
 env
 ```
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+CLERK_SECRET_KEY=your_clerk_secret_key
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/
+
+# Backend API
+NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Google Gemini API (Required for ingredient analysis)
+# Get your API key from: https://aistudio.google.com/app/apikey
+GOOGLE_GENAI_API_KEY=your_gemini_api_key_here
 ```
 
 Django

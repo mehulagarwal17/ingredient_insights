@@ -30,7 +30,7 @@ class ApiClient {
   async getAuthHeaders(token?: string) {
     // Get the JWT token from Clerk on client side
     const authToken = token || '';
-    
+
     return {
       'Authorization': authToken ? `Bearer ${authToken}` : '',
       'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export const apiClient = new ApiClient();
 // Hook for components to use with Clerk authentication
 export function useApiClient() {
   const { getToken } = useAuth();
-  
+
   return {
     getChatSessions: async () => {
       const token = await getToken();

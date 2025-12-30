@@ -24,11 +24,11 @@ interface AppSidebarProps {
   onShowIngredientAnalysis: (show: boolean) => void;
 }
 
-export function AppSidebar({ 
-  onSessionSelect, 
-  currentSessionId, 
-  showIngredientAnalysis, 
-  onShowIngredientAnalysis 
+export function AppSidebar({
+  onSessionSelect,
+  currentSessionId,
+  showIngredientAnalysis,
+  onShowIngredientAnalysis
 }: AppSidebarProps) {
   const { open, setOpen, isMobile } = useSidebar();
   const { sessions, loading, deleteSession } = useChat();
@@ -67,13 +67,52 @@ export function AppSidebar({
           <SidebarHeader className="pt-12">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Bot className="h-8 w-8 text-primary neon-text" />
+                {/* Custom food-themed logo */}
+                <div className="relative w-10 h-10">
+                  <svg viewBox="0 0 100 100" className="w-full h-full">
+                    {/* Plate base */}
+                    <circle cx="50" cy="50" r="45" fill="#ff8533" opacity="0.15" />
+                    <circle cx="50" cy="50" r="38" fill="none" stroke="#ff8533" strokeWidth="3" />
+
+                    {/* Fork */}
+                    <g transform="translate(30, 35)">
+                      <rect x="8" y="0" width="2" height="8" fill="#ff8533" />
+                      <rect x="12" y="0" width="2" height="8" fill="#ff8533" />
+                      <rect x="16" y="0" width="2" height="8" fill="#ff8533" />
+                      <rect x="8" y="8" width="10" height="20" rx="2" fill="#ff8533" />
+                    </g>
+
+                    {/* Spoon */}
+                    <g transform="translate(52, 35)">
+                      <ellipse cx="8" cy="6" rx="6" ry="8" fill="#6fad3d" />
+                      <rect x="6" y="12" width="4" height="18" rx="2" fill="#6fad3d" />
+                    </g>
+
+                    {/* Sparkle effect */}
+                    <circle cx="25" cy="25" r="2" fill="#f26d4f" opacity="0.8" />
+                    <circle cx="75" cy="30" r="1.5" fill="#6fad3d" opacity="0.8" />
+                    <circle cx="70" cy="70" r="2" fill="#ff8533" opacity="0.6" />
+                  </svg>
+                </div>
                 <h1 className="text-xl font-bold tracking-tight leading-none">
-                  <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(0,255,255,0.5)]">Tatva</span>
-                  <span className="text-white ml-1">.ai</span>
+                  <span
+                    className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+                    style={{ fontFamily: "'Outfit', sans-serif" }}
+                  >
+                    Ingredient
+                  </span>
+                  <span
+                    className="ml-1"
+                    style={{
+                      fontFamily: "'Outfit', sans-serif",
+                      color: 'hsl(25, 30%, 15%)'
+                    }}
+                  >
+                    Insights
+                  </span>
                 </h1>
               </div>
-              
+
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full text-primary hover:bg-primary/10">
@@ -109,9 +148,9 @@ export function AppSidebar({
               </DropdownMenu>
             </div>
           </SidebarHeader>
-          
+
           <div className="p-4 space-y-2">
-            <Button 
+            <Button
               onClick={handleNewAnalysis}
               className={`w-full ${showIngredientAnalysis ? 'neon-button' : 'neon-border'}`}
               variant={showIngredientAnalysis ? "default" : "outline"}
@@ -120,7 +159,7 @@ export function AppSidebar({
               New Analysis
             </Button>
           </div>
-          
+
           <ScrollArea className="flex-1 px-3 neon-scrollbar">
             <div className="space-y-2 pb-4">
               {loading ? (
@@ -131,11 +170,10 @@ export function AppSidebar({
                 sessions.map((session) => (
                   <div
                     key={session.id}
-                    className={`group relative rounded-lg border p-3 cursor-pointer transition-all duration-300 hover:scale-[1.02] ${
-                      !showIngredientAnalysis && currentSessionId === session.id 
-                        ? 'neon-border bg-primary/10' 
-                        : 'glass-morphism hover:bg-primary/5'
-                    }`}
+                    className={`group relative rounded-lg border p-3 cursor-pointer transition-all duration-300 hover:scale-[1.02] ${!showIngredientAnalysis && currentSessionId === session.id
+                      ? 'neon-border bg-primary/10'
+                      : 'glass-morphism hover:bg-primary/5'
+                      }`}
                     onClick={() => handleSessionClick(session.id)}
                   >
                     <div className="flex items-start justify-between">
@@ -146,7 +184,7 @@ export function AppSidebar({
                             {session.title}
                           </h3>
                         </div>
-                        
+
                         <div className="mt-1 flex items-center justify-between">
                           <span className="text-xs text-muted-foreground flex-shrink-0">
                             {formatDistanceToNow(new Date(session.updated_at), { addSuffix: true })}
@@ -156,7 +194,7 @@ export function AppSidebar({
                           </span>
                         </div>
                       </div>
-                      
+
                       <Button
                         variant="ghost"
                         size="sm"

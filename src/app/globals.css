@@ -4,78 +4,106 @@
 
 @layer base {
   :root {
-    --background: 220 13% 3%; /* Deep Black */
-    --foreground: 210 100% 95%; /* Bright White */
+    /* Premium Food-Centric Color Palette */
+    --background: 35 25% 97%;
+    /* Warm Cream #fdf9f5 */
+    --foreground: 25 30% 15%;
+    /* Rich Brown #2d1f16 */
 
-    --card: 220 13% 7%;
-    --card-foreground: 210 100% 95%;
+    --card: 0 0% 100%;
+    /* Pure White */
+    --card-foreground: 25 30% 15%;
+    /* Rich Brown */
 
-    --popover: 220 13% 3%;
-    --popover-foreground: 210 100% 95%;
+    --popover: 0 0% 100%;
+    /* Pure White */
+    --popover-foreground: 25 30% 15%;
+    /* Rich Brown */
 
-    --primary: 200 100% 50%; /* Neon Cyan/Blue */
-    --primary-foreground: 220 13% 3%;
+    --primary: 24 100% 58%;
+    /* Vibrant Orange #ff8533 */
+    --primary-foreground: 0 0% 100%;
+    /* White */
 
-    --secondary: 220 13% 12%;
-    --secondary-foreground: 210 100% 85%;
+    --secondary: 14 90% 58%;
+    /* Coral Red #f26d4f */
+    --secondary-foreground: 0 0% 100%;
+    /* White */
 
-    --muted: 220 13% 12%;
-    --muted-foreground: 210 100% 65%;
+    --muted: 35 20% 92%;
+    /* Light Warm Cream */
+    --muted-foreground: 25 20% 35%;
+    /* Medium Brown */
 
-    --accent: 200 100% 50%; /* Neon Cyan/Blue */
-    --accent-foreground: 220 13% 3%;
+    --accent: 95 45% 48%;
+    /* Fresh Green #6fad3d */
+    --accent-foreground: 0 0% 100%;
+    /* White */
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 100% 95%;
-    
-    --border: 200 100% 50% / 0.15;
-    --input: 200 100% 50% / 0.15;
-    --ring: 200 100% 50%;
-    --radius: 0.5rem;
+    /* Red */
+    --destructive-foreground: 0 0% 100%;
+    /* White */
 
-    --sidebar-background: 220 13% 5%;
-    --sidebar-foreground: 210 100% 85%;
-    --sidebar-border: 200 100% 50% / 0.1;
-    --sidebar-ring: 200 100% 50%;
-    --sidebar-accent: 200 100% 50% / 0.1;
-    --sidebar-accent-foreground: 210 100% 95%;
+    --border: 35 20% 88%;
+    /* Soft Beige Border */
+    --input: 35 20% 88%;
+    /* Soft Beige Border */
+    --ring: 24 100% 58%;
+    /* Vibrant Orange */
+    --radius: 0.75rem;
+    /* Rounded corners */
+
+    --sidebar-background: 0 0% 100%;
+    /* White */
+    --sidebar-foreground: 25 30% 15%;
+    /* Rich Brown */
+    --sidebar-border: 35 20% 88%;
+    /* Soft Beige */
+    --sidebar-ring: 24 100% 58%;
+    /* Vibrant Orange */
+    --sidebar-accent: 24 100% 58% / 0.1;
+    /* Light Orange */
+    --sidebar-accent-foreground: 25 30% 15%;
+    /* Rich Brown */
   }
- 
+
   .dark {
-    --background: 220 13% 3%;
-    --foreground: 210 100% 95%;
+    /* Keep light theme for food app - dark mode not needed */
+    --background: 35 25% 97%;
+    --foreground: 25 30% 15%;
 
-    --card: 220 13% 7%;
-    --card-foreground: 210 100% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 25 30% 15%;
 
-    --popover: 220 13% 3%;
-    --popover-foreground: 210 100% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 30% 15%;
 
-    --primary: 200 100% 50%;
-    --primary-foreground: 220 13% 3%;
+    --primary: 24 100% 58%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 13% 12%;
-    --secondary-foreground: 210 100% 85%;
+    --secondary: 14 90% 58%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 13% 12%;
-    --muted-foreground: 210 100% 65%;
+    --muted: 35 20% 92%;
+    --muted-foreground: 25 20% 35%;
 
-    --accent: 200 100% 50%;
-    --accent-foreground: 220 13% 3%;
+    --accent: 95 45% 48%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 100% 95%;
-    
-    --border: 200 100% 50% / 0.15;
-    --input: 200 100% 50% / 0.15;
-    --ring: 200 100% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --sidebar-background: 220 13% 5%;
-    --sidebar-foreground: 210 100% 85%;
-    --sidebar-border: 200 100% 50% / 0.1;
-    --sidebar-ring: 200 100% 50%;
-    --sidebar-accent: 200 100% 50% / 0.1;
-    --sidebar-accent-foreground: 210 100% 95%;
+    --border: 35 20% 88%;
+    --input: 35 20% 88%;
+    --ring: 24 100% 58%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 25 30% 15%;
+    --sidebar-border: 35 20% 88%;
+    --sidebar-ring: 24 100% 58%;
+    --sidebar-accent: 24 100% 58% / 0.1;
+    --sidebar-accent-foreground: 25 30% 15%;
   }
 }
 
@@ -83,113 +111,379 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, sans-serif;
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  }
 }
 
 @layer components {
-  /* Neon glow effects */
-  .neon-border {
-    @apply border border-primary/30 shadow-[0_0_20px_rgba(0,255,255,0.3)];
+
+  /* 3D Transform Utilities */
+  .preserve-3d {
+    transform-style: preserve-3d;
   }
-  
-  .neon-text {
-    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+
+  .perspective-1000 {
+    perspective: 1000px;
   }
-  
-  .neon-button {
+
+  .perspective-2000 {
+    perspective: 2000px;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  /* Food-themed Color Gradients */
+  .food-gradient {
+    background: linear-gradient(135deg,
+        hsl(25, 95%, 53%) 0%,
+        hsl(45, 93%, 58%) 50%,
+        hsl(120, 60%, 50%) 100%);
+  }
+
+  .food-gradient-warm {
+    background: linear-gradient(135deg,
+        hsl(15, 86%, 55%) 0%,
+        hsl(35, 91%, 60%) 100%);
+  }
+
+  .food-gradient-fresh {
+    background: linear-gradient(135deg,
+        hsl(120, 60%, 50%) 0%,
+        hsl(140, 55%, 45%) 100%);
+  }
+
+  .food-gradient-overlay {
+    background: linear-gradient(135deg,
+        rgba(255, 107, 53, 0.1) 0%,
+        rgba(255, 193, 7, 0.1) 50%,
+        rgba(76, 175, 80, 0.1) 100%);
+  }
+
+  /* 3D Card Animations */
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-3d:hover {
+    transform: rotateY(5deg) rotateX(-5deg) translateZ(20px);
+  }
+
+  .card-flip {
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-flip:hover {
+    transform: rotateY(180deg);
+  }
+
+  .card-flip-front,
+  .card-flip-back {
+    backface-visibility: hidden;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-flip-back {
+    transform: rotateY(180deg);
+  }
+
+  /* 3D Floating Animation */
+  @keyframes float-3d {
+
+    0%,
+    100% {
+      transform: translateY(0px) translateZ(0px) rotateX(0deg);
+    }
+
+    50% {
+      transform: translateY(-20px) translateZ(30px) rotateX(5deg);
+    }
+  }
+
+  .float-3d {
+    animation: float-3d 4s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+
+  /* 3D Rotating Food Icons */
+  @keyframes rotate-3d {
+    0% {
+      transform: rotateY(0deg) rotateX(0deg);
+    }
+
+    100% {
+      transform: rotateY(360deg) rotateX(360deg);
+    }
+  }
+
+  .rotate-3d {
+    animation: rotate-3d 20s linear infinite;
+    transform-style: preserve-3d;
+  }
+
+  .rotate-3d-slow {
+    animation: rotate-3d 30s linear infinite;
+    transform-style: preserve-3d;
+  }
+
+  /* 3D Pulse Glow */
+  @keyframes pulse-glow-3d {
+
+    0%,
+    100% {
+      box-shadow:
+        0 0 20px rgba(0, 255, 255, 0.3),
+        0 10px 40px rgba(0, 255, 255, 0.2);
+      transform: translateZ(0px) scale(1);
+    }
+
+    50% {
+      box-shadow:
+        0 0 40px rgba(0, 255, 255, 0.6),
+        0 20px 60px rgba(0, 255, 255, 0.4);
+      transform: translateZ(10px) scale(1.05);
+    }
+  }
+
+  .pulse-glow-3d {
+    animation: pulse-glow-3d 2s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+
+  /* Ingredient Card with 3D Effect */
+  .ingredient-card {
+    @apply bg-card border border-primary/20 rounded-lg p-6;
+    transform-style: preserve-3d;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.1),
+      0 0 20px rgba(0, 255, 255, 0.1);
+  }
+
+  .ingredient-card:hover {
+    transform: translateY(-8px) translateZ(20px) rotateX(2deg);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      0 0 40px rgba(0, 255, 255, 0.3);
+    border-color: rgba(0, 255, 255, 0.4);
+  }
+
+  /* Health Badge Variants */
+  .health-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium;
+    transform-style: preserve-3d;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .health-badge:hover {
+    transform: translateZ(5px) scale(1.05);
+  }
+
+  .health-badge-good {
+    @apply bg-green-500/20 text-green-400 border border-green-500/30;
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+  }
+
+  .health-badge-caution {
+    @apply bg-yellow-500/20 text-yellow-400 border border-yellow-500/30;
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.3);
+  }
+
+  .health-badge-avoid {
+    @apply bg-red-500/20 text-red-400 border border-red-500/30;
+    box-shadow: 0 0 15px rgba(244, 67, 54, 0.3);
+  }
+
+  .health-badge-unknown {
+    @apply bg-gray-500/20 text-gray-400 border border-gray-500/30;
+    box-shadow: 0 0 15px rgba(128, 128, 128, 0.3);
+  }
+
+  /* Warm food-themed effects */
+  .warm-border {
+    @apply border border-primary/20;
+    box-shadow: 0 2px 8px rgba(255, 133, 51, 0.12);
+    transform-style: preserve-3d;
+  }
+
+  .warm-text {
+    color: hsl(24, 100%, 58%);
+  }
+
+  .warm-button {
     @apply bg-primary text-primary-foreground transition-all duration-300;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    box-shadow:
+      0 4px 12px rgba(255, 133, 51, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
+    border-radius: 12px;
   }
-  
-  .neon-button:hover {
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.3);
-    transform: translateY(-1px);
+
+  .warm-button:hover {
+    box-shadow:
+      0 6px 16px rgba(255, 133, 51, 0.35),
+      0 3px 6px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px) translateZ(10px);
   }
-  
-  .cyber-grid {
-    background-image: 
-      linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
+
+  .warm-button:active {
+    transform: translateY(0px) translateZ(5px);
   }
-  
-  .glass-morphism {
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 255, 255, 0.2);
+
+  /* Legacy neon classes for compatibility */
+  .neon-border {
+    @apply warm-border;
   }
-  
-  /* Chat message styling */
+
+  .neon-text {
+    @apply warm-text;
+  }
+
+  .neon-button {
+    @apply warm-button;
+  }
+
+  /* Soft food texture background */
+  .food-texture {
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(255, 133, 51, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(111, 173, 61, 0.04) 0%, transparent 50%);
+    background-size: 100% 100%;
+  }
+
+  .soft-glass {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 133, 51, 0.15);
+    transform-style: preserve-3d;
+  }
+
+  /* Chat message styling with warm theme */
   .chat-message-user {
     @apply bg-primary text-primary-foreground;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    box-shadow:
+      0 4px 12px rgba(255, 133, 51, 0.25),
+      0 2px 4px rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    border-radius: 12px;
   }
-  
+
+  .chat-message-user:hover {
+    transform: translateZ(5px);
+    box-shadow:
+      0 6px 16px rgba(255, 133, 51, 0.3),
+      0 3px 6px rgba(0, 0, 0, 0.12);
+  }
+
   .chat-message-assistant {
-    @apply bg-muted text-muted-foreground border border-primary/20;
+    @apply bg-card text-foreground border border-border;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
-  
-  /* Sidebar enhancements */
+
+  .chat-message-assistant:hover {
+    transform: translateZ(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Sidebar warm theme */
+  .sidebar-warm {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(250, 248, 243, 1) 100%);
+    border-right: 1px solid hsl(30, 15%, 85%);
+  }
+
+  /* Legacy compatibility */
   .sidebar-neon {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
-    border-right: 1px solid rgba(0, 255, 255, 0.2);
+    @apply sidebar-warm;
   }
-  
-  /* Form inputs */
-  .neon-input {
-    @apply bg-background border border-primary/30 text-foreground;
+
+  /* Form inputs with warm theme */
+  .warm-input {
+    @apply bg-card border border-border text-foreground;
     transition: all 0.3s ease;
+    transform-style: preserve-3d;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
-  
-  .neon-input:focus {
+
+  .warm-input:focus {
     @apply border-primary;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+    box-shadow:
+      0 0 0 3px rgba(255, 133, 51, 0.12),
+      0 4px 12px rgba(255, 133, 51, 0.18);
+    transform: translateZ(5px);
   }
-  
-  .neon-input::placeholder {
-    @apply text-gray-500;
+
+  .warm-input::placeholder {
+    @apply text-muted-foreground;
   }
-  
+
+  /* Legacy compatibility */
+  .neon-input {
+    @apply warm-input;
+  }
+
   /* Force gray placeholder for ingredient form */
   textarea[name="ingredients"]::placeholder {
     color: rgb(107, 114, 128) !important;
     opacity: 1 !important;
   }
-  
+
   /* Force delete icons to be neon blue */
   .trash-icon {
     color: rgb(0, 255, 255) !important;
   }
-  
-  /* Modern dotted grid background texture for main content */
+
+  /* Warm, light background for main content */
   .main-content-bg {
-    background-color: rgba(0, 0, 0, 0.95);
-    background-image: 
-      radial-gradient(circle at 20% 50%, rgba(128, 128, 128, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(128, 128, 128, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 40% 20%, rgba(128, 128, 128, 0.12) 0%, transparent 50%),
-      radial-gradient(circle, rgba(128, 128, 128, 0.8) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 100% 100%, 15px 15px;
-    background-position: 0 0, 0 0, 0 0, 0 0;
+    background-color: hsl(35, 25%, 97%);
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(255, 133, 51, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(111, 173, 61, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 40% 20%, rgba(242, 109, 79, 0.04) 0%, transparent 50%);
+    background-size: 100% 100%, 100% 100%, 100% 100%;
+    background-position: 0 0, 0 0, 0 0;
     position: relative;
     z-index: 1;
   }
-  
-  /* Strong override for chat area to hide dotted background */
-  .chat-black-bg {
-    background: rgb(0, 0, 0) !important;
+
+  /* Light chat background */
+  .chat-light-bg {
+    background: hsl(0, 0%, 100%) !important;
     background-image: none !important;
     position: relative !important;
     z-index: 10 !important;
   }
-  
+
+  /* Legacy compatibility */
+  .chat-black-bg {
+    @apply chat-light-bg;
+  }
+
   .chat-black-bg::before {
     display: none !important;
   }
-  
+
   .main-content-bg::before {
     content: '';
     position: absolute;
@@ -197,41 +491,203 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
-      radial-gradient(circle at 25% 25%, rgba(128, 128, 128, 0.2) 0%, transparent 25%),
-      radial-gradient(circle at 75% 75%, rgba(128, 128, 128, 0.15) 0%, transparent 25%);
+    background:
+      radial-gradient(circle at 25% 25%, rgba(255, 107, 53, 0.12) 0%, transparent 25%),
+      radial-gradient(circle at 75% 75%, rgba(76, 175, 80, 0.1) 0%, transparent 25%);
     background-size: 100% 100%, 100% 100%;
     pointer-events: none;
     z-index: -1;
   }
-  
-  .main-content-bg > * {
+
+  .main-content-bg>* {
     position: relative;
     z-index: 2;
   }
-  
+
   /* Animated dots background pattern */
   .dots-pattern {
     background-image: radial-gradient(circle, rgba(128, 128, 128, 0.15) 1px, transparent 1px);
     background-size: 20px 20px;
     background-position: 0 0, 10px 10px;
   }
-  
-  /* Scrollbar styling */
+
+  /* 3D Parallax Layers */
+  .parallax-layer {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease-out;
+  }
+
+  .parallax-layer-1 {
+    transform: translateZ(50px);
+  }
+
+  .parallax-layer-2 {
+    transform: translateZ(100px);
+  }
+
+  .parallax-layer-3 {
+    transform: translateZ(150px);
+  }
+
+  /* 3D Button Press Effect */
+  .button-3d {
+    transform-style: preserve-3d;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+      0 6px 0 rgba(0, 200, 200, 0.5),
+      0 10px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .button-3d:hover {
+    transform: translateY(-2px) translateZ(10px);
+    box-shadow:
+      0 8px 0 rgba(0, 200, 200, 0.6),
+      0 15px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .button-3d:active {
+    transform: translateY(4px) translateZ(5px);
+    box-shadow:
+      0 2px 0 rgba(0, 200, 200, 0.4),
+      0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Food Icon Bounce Animation */
+  @keyframes bounce-3d {
+
+    0%,
+    100% {
+      transform: translateY(0) translateZ(0) rotateY(0deg);
+    }
+
+    25% {
+      transform: translateY(-15px) translateZ(15px) rotateY(90deg);
+    }
+
+    50% {
+      transform: translateY(0) translateZ(30px) rotateY(180deg);
+    }
+
+    75% {
+      transform: translateY(-15px) translateZ(15px) rotateY(270deg);
+    }
+  }
+
+  .bounce-3d {
+    animation: bounce-3d 3s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+
+  /* Shimmer Effect for Loading */
+  @keyframes shimmer-3d {
+    0% {
+      background-position: -1000px 0;
+      transform: translateZ(0px);
+    }
+
+    50% {
+      transform: translateZ(10px);
+    }
+
+    100% {
+      background-position: 1000px 0;
+      transform: translateZ(0px);
+    }
+  }
+
+  .shimmer-3d {
+    background: linear-gradient(90deg,
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 255, 255, 0.2) 50%,
+        rgba(0, 0, 0, 0.8) 100%);
+    background-size: 1000px 100%;
+    animation: shimmer-3d 2s infinite;
+    transform-style: preserve-3d;
+  }
+
+  /* Tilt on Hover */
+  .tilt-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .tilt-3d:hover {
+    transform: perspective(1000px) rotateX(10deg) rotateY(-10deg) translateZ(20px);
+  }
+
+  /* Scrollbar styling with 3D effect */
   .neon-scrollbar::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   .neon-scrollbar::-webkit-scrollbar-track {
     background: rgba(0, 0, 0, 0.3);
   }
-  
+
   .neon-scrollbar::-webkit-scrollbar-thumb {
     background: rgba(0, 255, 255, 0.5);
     border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
   }
-  
+
   .neon-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 255, 255, 0.7);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+  }
+
+  /* Entrance Animations */
+  @keyframes slide-in-3d {
+    from {
+      opacity: 0;
+      transform: translateX(-50px) translateZ(-50px) rotateY(-20deg);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0) translateZ(0) rotateY(0deg);
+    }
+  }
+
+  .slide-in-3d {
+    animation: slide-in-3d 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    transform-style: preserve-3d;
+  }
+
+  @keyframes fade-in-3d {
+    from {
+      opacity: 0;
+      transform: translateZ(-100px) scale(0.8);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateZ(0) scale(1);
+    }
+  }
+
+  .fade-in-3d {
+    animation: fade-in-3d 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    transform-style: preserve-3d;
+  }
+
+  /* Stagger animation delays */
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .delay-500 {
+    animation-delay: 500ms;
   }
 }

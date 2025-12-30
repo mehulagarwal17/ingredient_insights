@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, type FormEvent } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { Paperclip, Send, Camera, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -19,7 +20,7 @@ const useTypewriter = (texts: string[], speed: number = 100) => {
 
   useEffect(() => {
     const currentText = texts[textIndex];
-    
+
     const timeout = setTimeout(() => {
       if (!isDeleting) {
         if (charIndex < currentText.length) {
@@ -56,15 +57,15 @@ export function IngredientForm({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+
   const [text, setText] = useState('');
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  
+
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
-  
+
   const { toast } = useToast();
-  
+
   const typewriterText = useTypewriter([
     "Paste ingredient list or upload a label photo...",
     "What's in your food?",
@@ -144,43 +145,49 @@ export function IngredientForm({
       setIsCameraOpen(false);
     }
   };
-  
+
   const handleRemoveImage = () => {
-      setImagePreview(null);
-      if(fileInputRef.current) {
-          fileInputRef.current.value = '';
-      }
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   }
 
   const hasContent = !!text || !!(fileInputRef.current?.files && fileInputRef.current.files.length > 0 && fileInputRef.current.files[0].size > 0);
 
   return (
-    <Card className="w-full bg-card/40 border-primary/10 shadow-lg shadow-primary/5 p-4 space-y-4">
-      {imagePreview && (
-        <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-primary/30 mx-auto">
-          <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-          <Button
-            type="button"
-            variant="destructive"
-            size="icon"
-            className="absolute top-1 right-1 h-6 w-6"
-            onClick={handleRemoveImage}
-          >
-            <X className="h-3 w-3" />
-            <span className="sr-only">Remove image</span>
-          </Button>
-        </div>
-      )}
-      <form ref={formRef} action={formAction} className="relative space-y-4">
-        <div className="relative flex items-center w-full">
+    <motion.div
+      initial={{ opacity: 0, y: 30, rotateX: -10 }}
+      animate={{ opacity: 1, y: 0, rotateX: 0 }}
+      transition={{ duration: 0.6, type: 'spring' }}
+      className="w-full perspective-1000"
+    >
+      <Card className="w-full bg-card border-border shadow-lg p-4 space-y-4 card-3d" style={{ borderRadius: '16px' }}>
+        {imagePreview && (
+          <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-primary/30 mx-auto">
+            <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+            <Button
+              type="button"
+              variant="destructive"
+              size="icon"
+              className="absolute top-1 right-1 h-6 w-6"
+              onClick={handleRemoveImage}
+            >
+              <X className="h-3 w-3" />
+              <span className="sr-only">Remove image</span>
+            </Button>
+          </div>
+        )}
+        <form ref={formRef} action={formAction} className="relative space-y-4">
+          <div className="relative flex items-center w-full">
             <Textarea
               name="ingredients"
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder={typewriterText}
               className={cn(
-                "w-full rounded-xl bg-background/50 border-primary/20 p-4 pr-32 text-base resize-none focus:ring-0 focus:outline-none focus:border-primary/50 transition-colors neon-input placeholder:!text-white placeholder:!opacity-100",
-                "min-h-[56px]"
+                "w-full rounded-xl bg-card border-border p-4 pr-32 text-base resize-none focus:ring-0 focus:outline-none focus:border-primary transition-colors warm-input",
+                "min-h-[56px] placeholder:text-muted-foreground"
               )}
               rows={1}
               onKeyDown={(e) => {
@@ -192,66 +199,70 @@ export function IngredientForm({
             />
 
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                <Dialog open={isCameraOpen} onOpenChange={setIsCameraOpen}>
-                    <DialogTrigger asChild>
-                        <Button type="button" variant="ghost" size="icon" className="text-foreground/60 hover:text-foreground">
-                            <Camera className="h-5 w-5" />
-                            <span className="sr-only">Use Camera</span>
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl">
-                        <DialogHeader>
-                            <DialogTitle>Use Camera</DialogTitle>
-                        </DialogHeader>
-                         <div className="space-y-4">
-                            <video ref={videoRef} className="w-full aspect-video rounded-md bg-black" autoPlay muted playsInline/>
-                            {hasCameraPermission === false && (
-                                <Alert variant="destructive">
-                                    <AlertTitle>Camera Access Required</AlertTitle>
-                                    <AlertDescription>
-                                        Please allow camera access to use this feature.
-                                    </AlertDescription>
-                                </Alert>
-                            )}
-                            <div className="flex justify-center gap-4">
-                                <Button type="button" onClick={handleCapture} disabled={!hasCameraPermission}>
-                                    <Camera className="mr-2" /> Capture
-                                </Button>
-                            </div>
-                        </div>
-                    </DialogContent>
-                </Dialog>
+              <Dialog open={isCameraOpen} onOpenChange={setIsCameraOpen}>
+                <DialogTrigger asChild>
+                  <Button type="button" variant="ghost" size="icon" className="text-foreground/60 hover:text-foreground">
+                    <Camera className="h-5 w-5" />
+                    <span className="sr-only">Use Camera</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>Use Camera</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <video ref={videoRef} className="w-full aspect-video rounded-md bg-black" autoPlay muted playsInline />
+                    {hasCameraPermission === false && (
+                      <Alert variant="destructive">
+                        <AlertTitle>Camera Access Required</AlertTitle>
+                        <AlertDescription>
+                          Please allow camera access to use this feature.
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                    <div className="flex justify-center gap-4">
+                      <Button type="button" onClick={handleCapture} disabled={!hasCameraPermission}>
+                        <Camera className="mr-2" /> Capture
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
 
-                <Button type="button" variant="ghost" size="icon" className="text-foreground/60 hover:text-foreground" onClick={() => fileInputRef.current?.click()}>
-                    <Paperclip className="h-5 w-5" />
-                    <span className="sr-only">Upload Image</span>
-                </Button>
-                <input
-                    type="file"
-                    name="image"
-                    ref={fileInputRef}
-                    className="hidden"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                />
+              <Button type="button" variant="ghost" size="icon" className="text-foreground/60 hover:text-foreground" onClick={() => fileInputRef.current?.click()}>
+                <Paperclip className="h-5 w-5" />
+                <span className="sr-only">Upload Image</span>
+              </Button>
+              <input
+                type="file"
+                name="image"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
             </div>
-             <canvas ref={canvasRef} className="hidden" />
-        </div>
-        <div className="flex flex-col items-center gap-4">
-            <Button 
+            <canvas ref={canvasRef} className="hidden" />
+          </div>
+          <div className="flex flex-col items-center gap-4">
+            <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.98 }}>
+              <Button
                 type="submit"
-                size="lg" 
-                disabled={isPending || !hasContent} 
-                className="w-full sm:w-auto bg-primary/90 hover:bg-primary text-primary-foreground shadow-md shadow-primary/20"
-            >
+                size="lg"
+                disabled={isPending || !hasContent}
+                className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground shadow-md warm-button"
+                style={{ borderRadius: '12px', fontWeight: '600' }}
+              >
                 <Send className="h-4 w-4 mr-2" />
                 Analyze
-            </Button>
+              </Button>
+            </motion.div>
             <p className="text-xs text-center text-neutral-500">
-                Ingredient Insights AI can make mistakes. Consider checking important information.
+              Ingredient Insights AI can make mistakes. Consider checking important information.
             </p>
-        </div>
-      </form>
-    </Card>
+          </div>
+        </form>
+      </Card>
+    </motion.div>
   );
 }
